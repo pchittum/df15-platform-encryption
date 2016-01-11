@@ -5,7 +5,9 @@ public with sharing class TenantSecretService {
 
 	@AuraEnabled
 	public static TenantSecret rotateKey(){
-        TenantSecret newSecret = new TenantSecret(Description='New Secret from Visualforce Page.');
+		String descText = UserInfo.getName() + ' new secret via Lightning';
+
+        TenantSecret newSecret = new TenantSecret(Description=descText);
 
         try {
             insert newSecret;

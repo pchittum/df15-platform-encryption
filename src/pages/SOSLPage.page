@@ -1,0 +1,82 @@
+<apex:page controller="SOSLController">
+    <apex:form >
+        <apex:inputText value="{!searchStr}"/>
+        <apex:commandButton value="Search in Account and Contact" action="{!soslDemo_method}"  reRender="acct,error,oppt,cont" status="actStatusId"/>
+        <apex:actionStatus id="actStatusId">
+            <apex:facet name="start" >
+                <img src="/img/loading.gif"/>                    
+            </apex:facet>
+        </apex:actionStatus>
+    
+        <apex:outputPanel title="" id="error">
+            <apex:pageMessages ></apex:pageMessages>
+        </apex:outputPanel>
+ 
+        <apex:pageBlock title="Accounts" id="acct">
+            <apex:pageblockTable value="{!accList }" var="acc">
+                <apex:column >
+                    <apex:facet name="header">
+                        <apex:commandLink value="{!$ObjectType.Account.Fields.Name.Label}" action="{!doSort}" rerender="acct">
+                            <apex:param name="sortField" value="Name" assignTo="{!sortField}"/>
+                            <apex:param name="strField" value="" assignTo="{!strField}"/>
+                            <apex:param name="objectList" value="accList" assignTo="{!objectList}"/>
+                            <img class="{!IF(sortField=='Name',imgClass,'')}" title="{!IF(sortField=='Name',imgTitle,'')}" src="/s.gif" />
+                        </apex:commandLink>            
+                    </apex:facet>
+                    <apex:outputLink value="{!URLFOR($Action.Account.View, acc.id)}">{!acc.name}</apex:outputLink> 
+                </apex:column>
+                <apex:column value="{!acc.Type}"/>
+            </apex:pageblockTable>
+        </apex:pageBlock>
+ 
+        <apex:pageBlock title="Contacts" id="cont">
+            <apex:pageblockTable value="{!conList}" var="con">
+                <apex:column > 
+                    <apex:facet name="header">
+                        <apex:commandLink value="{!$ObjectType.Contact.Fields.Name.Label}" action="{!doSort}" rerender="cont">
+                            <apex:param name="sortField" value="Name" assignTo="{!sortField}"/>
+                            <apex:param name="strField" value="" assignTo="{!strField}"/>
+                            <apex:param name="objectList" value="conList" assignTo="{!objectList}"/>
+                            <img class="{!IF(sortField=='Name',imgClass,'')}" title="{!IF(sortField=='Name',imgTitle,'')}" src="/s.gif" />
+                        </apex:commandLink>
+                    </apex:facet> 
+                    <apex:outputLink value="{!URLFOR($Action.Contact.View, con.id)}">{!con.name}</apex:outputLink>
+                    <!--<apex:outputField value="{!con.Name}" />-->
+                </apex:column>
+                <apex:column > 
+                    <apex:facet name="header">
+                        <apex:commandLink value="{!$ObjectType.Contact.Fields.email.Label}" action="{!doSort}" rerender="cont">
+                            <apex:param name="sortField" value="email" assignTo="{!sortField}"/>
+                            <apex:param name="strField" value="" assignTo="{!strField}"/>
+                            <apex:param name="objectList" value="conList" assignTo="{!objectList}"/>
+                            <img class="{!IF(sortField=='email',imgClass,'')}" title="{!IF(sortField=='email',imgTitle,'')}" src="/s.gif" />
+                        </apex:commandLink>
+                    </apex:facet> 
+                    <apex:outputField value="{!con.email}" />
+                </apex:column>
+                <apex:column > 
+                    <apex:facet name="header">
+                        <apex:commandLink value="{!$ObjectType.Contact.Fields.DLN__c.Label}" action="{!doSort}" rerender="cont">
+                            <apex:param name="sortField" value="DLN__c" assignTo="{!sortField}"/>
+                            <apex:param name="strField" value="" assignTo="{!strField}"/>
+                            <apex:param name="objectList" value="conList" assignTo="{!objectList}"/>
+                            <img class="{!IF(sortField=='DLN__c',imgClass,'')}" title="{!IF(sortField=='DLN__c',imgTitle,'')}" src="/s.gif" />
+                        </apex:commandLink>
+                    </apex:facet> 
+                    <apex:outputField value="{!con.DLN__c}" />
+                </apex:column>
+                <apex:column > 
+                    <apex:facet name="header">
+                        <apex:commandLink value="{!$ObjectType.Contact.Fields.SSN__c.Label}" action="{!doSort}" rerender="cont">
+                            <apex:param name="sortField" value="SSN__c" assignTo="{!sortField}"/>
+                            <apex:param name="strField" value="" assignTo="{!strField}"/>
+                            <apex:param name="objectList" value="conList" assignTo="{!objectList}"/>
+                            <img class="{!IF(sortField=='SSN__c',imgClass,'')}" title="{!IF(sortField=='SSN__c',imgTitle,'')}" src="/s.gif" />
+                        </apex:commandLink>
+                    </apex:facet> 
+                    <apex:outputField value="{!con.SSN__c}" />
+                </apex:column>
+            </apex:pageblockTable>
+        </apex:pageBlock>
+    </apex:form>   
+</apex:page>

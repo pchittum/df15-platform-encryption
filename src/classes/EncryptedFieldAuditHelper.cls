@@ -69,4 +69,28 @@ public with sharing class EncryptedFieldAuditHelper {
 
     }
 
+    @AuraEnabled
+    public static List<SetupAuditTrail> getEncryptionAudits(){
+        List<SetupAuditTrail> filteredAuditRecords = new List<SetupAuditTrail>();
+
+        Pattern ptn = Pattern.compile('.*[E,e]ncryption.*');
+
+        for (List<SetupAuditTrail> batch : [SELECT Action, Id, Section, CreatedDate, CreatedBy.Name, Display, DelegateUser FROM SetupAuditTrail ORDER BY CreatedDate DESC]){
+            for (SetupAuditTrail item : batch) {
+                
+                Matcher matchSection = ptn.matcher(item.Section != null ? item.Section : '');
+                Matcher matchDisplay = ptn.matcher(item.Display != null ? item.Display : '');
+                
+                if (matchSection.matches() || matchDisplay.matches()){
+                    filteredAuditRecords.add(item);
+                }
+            }
+            System.debug(Limits.getHeapSize());
+            System.debug(Limits.getLimitHeapSize());
+        }
+
+        return filteredAuditRecords;
+
+    }
+
 }
